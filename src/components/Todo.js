@@ -11,10 +11,11 @@ const Todo = ({todo, onDelete, onClick}) =>
     id: {todo.id}, title: {todo.title}, completed: {String(todo.completed)} 
     <a href="#" 
       onClick={(e) => {
+        e.persist(); // https://reactjs.org/docs/events.html#event-pooling
         e.cancelBubble = true;
         if (e.stopPropagation) {
           e.stopPropagation();
-        } 
+        }
         onDelete(todo.id)}
       }>
       Delete

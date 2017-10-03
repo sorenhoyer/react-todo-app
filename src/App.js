@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TodoList from './components/TodoList';
 import AddTodo from './components/AddTodo';
+import Footer from './components/Footer';
 import './App.css';
 import uuid from 'uuid';
 // import $ from 'jquery';
@@ -10,7 +11,9 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      todos: []
+      visibilityFilter: 'SHOW_ALL',
+      todos: [],
+      visibleTodos: []
     };
     // this.apiUrl = 'http://jsonplaceholder.typicode.com/todos';
   }
@@ -32,6 +35,8 @@ class App extends Component {
             order: 2
           }
         ]
+      }, function() {
+        this.syncVisibleTodos();
       }
     );
 
@@ -93,21 +98,17 @@ class App extends Component {
     let todos = this.state.todos;
     todos.push(todo);
     
-    this.setState({todos: todos});
+    this.setState({todos: todos}, this.syncVisibleTodos());
   }
 
   handleDeleteTodo(id) {
-    // let todos = this.state.todos;
-    // let index = todos.findIndex(x => x.id === id);
-    // todos.splice(index,1);
-    // this.setState({todos: todos});
-
     // Filter all todos except the one to be removed
     const remainder = this.state.todos.filter((todo) => {
       return (todo.id !== id ? todo : null)
     });
-
-    this.setState({todos: remainder});
+    this.setState({todos: remainder}, function(){
+      this.syncVisibleTodos()
+    });
   }
 
   handleClickTodo(id) {
@@ -117,11 +118,44 @@ class App extends Component {
     this.setState({todos: todos});
   }
 
+  handleClickFooterLink(filter) {
+    let visibilityFilter; 
+    switch(filter) {
+      case 'SHOW_ACTIVE':
+        visibilityFilter = 'SHOW_ACTIVE';
+        break;
+      case 'SHOW_COMPLETED':
+        visibilityFilter = 'SHOW_COMPLETED';
+        break;
+      default:
+      visibilityFilter = 'SHOW_ALL';
+    }
+    this.setState({visibilityFilter: visibilityFilter}, function(){ 
+      this.syncVisibleTodos(); 
+    });
+  }
+
+  syncVisibleTodos() {
+    let visibleTodos;
+    switch(this.state.visibilityFilter) {
+      case 'SHOW_ACTIVE':
+        visibleTodos = this.state.todos.filter(todo => !todo.completed);
+        break;
+      case 'SHOW_COMPLETED':
+        visibleTodos = this.state.todos.filter(todo => todo.completed);
+        break;
+      default:
+        visibleTodos = this.state.todos;
+    }
+    this.setState({visibleTodos: visibleTodos});
+  }
+
   render() {
     return (
       <div className="App">
         <AddTodo addTodo={this.handleAddTodo.bind(this)}/>
-        <TodoList todos={this.state.todos} onDelete={this.handleDeleteTodo.bind(this)} onClick={this.handleClickTodo.bind(this)} />
+        <TodoList todos={this.state.todos} visibleTodos={this.state.visibleTodos} onDelete={this.handleDeleteTodo.bind(this)} onClick={this.handleClickTodo.bind(this)} />
+        <Footer visibilityFilter={this.state.visibilityFilter} onClick={this.handleClickFooterLink.bind(this)}/>
       </div>
     );
   }

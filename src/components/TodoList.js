@@ -2,8 +2,8 @@ import React/*, { Component }*/ from 'react';
 import PropTypes from 'prop-types';
 import Todo from './Todo';
 
-const TodoList = ({todos, onDelete, onClick}) => {
-  let todoItems = todos.map(todo => {
+const TodoList = ({todos, visibleTodos, onDelete, onClick}) => {
+  let todoItems = visibleTodos.map(todo => {
     return <Todo key={todo.id} todo={todo} onDelete={onDelete} onClick={onClick}/>
   });
 
