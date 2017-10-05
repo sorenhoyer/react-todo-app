@@ -12,8 +12,11 @@ const getVisibleTodos = (todos, filter) => {
     case 'SHOW_COMPLETED':
       visibleTodos = todos.filter(todo => todo.completed);
       break;
-    default:
+    case 'SHOW_ALL':
       visibleTodos = todos;
+      break;
+    default:
+      throw new Error('Unknown filter: ' + filter)
   }
   return {todos: visibleTodos};
   
