@@ -1,39 +1,35 @@
 import React/*, { Component }*/ from 'react';
 import PropTypes from 'prop-types';
 
-const Todo = ({todo, onDelete, onClick}) => 
+const Todo = ({id, title, completed, onClick, onDelete}) =>
   <li
-    onClick={() => onClick(todo.id)}
+    onClick={onClick}
     style={{
-      textDecoration: todo.completed ? 'line-through' : 'none'
+      textDecoration: completed ? 'line-through' : 'none'
     }}
   >
-    id: {todo.id}, title: {todo.title}, completed: {String(todo.completed)} 
-    <a href="#" 
+    id: {id}, title: {title}, completed: {String(completed)}
+    {
+      // eslint-disable-next-line
+    }<a
+      href="#"
       onClick={(e) => {
         e.persist(); // https://reactjs.org/docs/events.html#event-pooling
         e.cancelBubble = true;
         if (e.stopPropagation) {
           e.stopPropagation();
         }
-        onDelete(todo.id)}
+        onDelete()}
       }>
       Delete
     </a>
   </li>
 
-// class Todo extends Component {
-//   deleteTodo(id) {
-//     this.props.onDelete(id);
-//   }
-
-//   render() {
-//     return <li>id: {this.props.todo.id}, title: {this.props.todo.title}, completed: {this.props.todo.completed} <a href="#" onClick={this.deleteTodo.bind(this, this.props.todo.id)}>Delete</a></li>
-//   }
-// }
-
 Todo.propTypes = {
-  todo: PropTypes.object,
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  completed: PropTypes.bool.isRequired,
+  onClick: PropTypes.func,
   onDelete: PropTypes.func
 }
 
