@@ -1,7 +1,9 @@
-import React/*, { Component }*/ from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { addTodo } from '../actions';
 
-const AddTodo = ({addTodo}) => {
+let AddTodo = ({dispatch}) => {
   let input;
 
   return <div>
@@ -9,64 +11,24 @@ const AddTodo = ({addTodo}) => {
     <form onSubmit={(e) => 
       {
         e.preventDefault();
-        if(input.value === '') {
-          alert('title is required');
-        } else {
-          let newTodo = {
-            title: input.value,
-            completed: false
-          }
-          addTodo(newTodo);
-          input.value = '';
+        if(!input.value.trim()){
+          return
         }
+        dispatch(addTodo(input.value));
+        input.value = '';
       }
     }>
       <label>Title</label>
       <input type="text" ref={title => { input = title }}/>
-      <input type="submit" value="Submit"/>
+      <button type="submit">Submit</button>
     </form>
   </div>
 }
 
-// class AddTodo extends Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       newTodo: {}
-//     };
-//   }
-
-//   handleSubmit(e) {
-//     if(this.refs.title.value === '') {
-//       alert('title is required');
-//     } else {
-//       this.setState({
-//         newTodo: {
-//           title: this.refs.title.value,
-//           completed: false
-//         }
-//       }, function(){
-//         // console.log(this.state);
-//         this.props.addTodo(this.state.newTodo);
-//       });
-//     }
-//     e.preventDefault();
-//   }
-
-//   render() {
-//     return <div>
-//       <h3>Add Todo</h3>
-//       <form onSubmit={this.handleSubmit.bind(this)}>
-//         <label>Title</label>
-//         <input type="text" ref="title"/>
-//         <input type="submit" value="Submit"/>
-//       </form>
-//     </div>
-//   }
-// }
+AddTodo = connect()(AddTodo);
 
 AddTodo.propTypes = {
-  newTodo: PropTypes.func
-}
+  dispatch: PropTypes.func
+};
 
 export default AddTodo;
