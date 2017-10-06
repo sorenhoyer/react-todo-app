@@ -11,5 +11,4 @@ const Footer = () =>
     {', '}
     <FilterLink filter="SHOW_COMPLETED">Completed</FilterLink>
   </p>
-
 export default Footer;
