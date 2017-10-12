@@ -25,4 +25,19 @@ export const toggleTodo = id => {
   }
 }
 
+export const toggleEditingTodo = id => {
+  return {
+    type: 'IS_EDITING_TODO',
+    id
+  }
+}
+
+export const updateTodo = (id, title) => {
+  return {
+    type: 'UPDATE_TODO',
+    id,
+    title
+  }
+}
+
 

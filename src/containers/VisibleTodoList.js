@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { toggleTodo, deleteTodo } from '../actions';
+import { toggleTodo, deleteTodo, toggleEditingTodo, updateTodo } from '../actions';
 import TodoList from '../components/TodoList';
 
 const getVisibleTodos = (todos, filter) => {
@@ -33,6 +33,9 @@ const mapDispatchToProps = dispatch => {
     },
     onTodoDelete: id => {
       dispatch(deleteTodo(id))
+    },
+    onTodoToggleEditing: id => {
+      dispatch(toggleEditingTodo(id))
     }
   };
 }

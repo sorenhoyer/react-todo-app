@@ -1,14 +1,59 @@
 import React/*, { Component }*/ from 'react';
 import PropTypes from 'prop-types';
 
-const Todo = ({id, title, completed, onClick, onDelete}) =>
-  <li
-    onClick={onClick}
+const Todo = ({id, title, isEditing, completed, onClickTodo, onDeleteTodo, onToggleEditingTodo, onUpdateTodo}) => {
+  let input = title;
+  let titleVar;
+  let btnSubmit;
+
+  //if(input !== title) {
+    btnSubmit = <button 
+      type="submit"
+      onClick={e=>{
+        e.persist();
+        e.cancelBubble = true;
+        if(e.stopPropagation())
+          e.stopPropagation();
+      }}
+    >
+    Save {input}
+    </button>
+  //}
+
+  if(isEditing) {
+    titleVar = <form 
+      onSubmit={e => {
+        e.preventDefault();
+        if(!input.value.trim()){
+          return
+        }
+        onUpdateTodo(id, input.value);
+        onToggleEditingTodo();
+      }}
+    >
+      <label>{input}</label><input 
+        type="text" 
+        defaultValue={title} 
+        ref={titleInput => {
+          input = titleInput}
+        }
+        onClick={e=>{
+          e.persist();
+          e.cancelBubble = true;
+          if(e.stopPropagation())
+            e.stopPropagation();
+        }}
+      />
+      {btnSubmit}
+    </form>
+  }
+  return <li
+    onClick={onClickTodo}
     style={{
       textDecoration: completed ? 'line-through' : 'none'
     }}
   >
-    id: {id}, title: {title}, completed: {String(completed)}
+    id: {id}, title: {titleVar ? titleVar : title}, completed: {String(completed)}, isEditing: {String(isEditing)}
     {
       // eslint-disable-next-line
     }<a
@@ -19,18 +64,30 @@ const Todo = ({id, title, completed, onClick, onDelete}) =>
         if (e.stopPropagation) {
           e.stopPropagation();
         }
-        onDelete()}
+        onDeleteTodo()}
       }>
       Delete
     </a>
+    <a
+      href="#"
+      onClick={e => {
+        e.persist();
+        e.cancelBubble = true;
+        if(e.stopPropagation())
+          e.stopPropagation();
+        onToggleEditingTodo();
+      }}
+    > Edit
+    </a>
   </li>
+}
 
 Todo.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  onClick: PropTypes.func,
-  onDelete: PropTypes.func
+  onClickTodo: PropTypes.func,
+  onDeleteTodo: PropTypes.func
 }
 
 export default Todo;

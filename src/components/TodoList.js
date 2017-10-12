@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Todo from './Todo';
+import EditableTodo from '../containers/EditableTodo';
 
-const TodoList = ({todos, onTodoClick, onTodoDelete}) => {
+const TodoList = ({todos, onTodoClick, onTodoDelete, onTodoToggleEditing}) => {
   let todoItems = [];
   
   todoItems = todos.map(todo => {
-    return <Todo key={todo.id} {...todo} onDelete={() => onTodoDelete(todo.id)} onClick={() => onTodoClick(todo.id)}/>
+    return <EditableTodo 
+      key={todo.id} 
+      {...todo} 
+      onDeleteTodo={() => onTodoDelete(todo.id)} 
+      onClickTodo={() => onTodoClick(todo.id)} 
+      onToggleEditingTodo={() => onTodoToggleEditing(todo.id)}
+  />
   });
 
   return <ul>{todoItems}</ul>
