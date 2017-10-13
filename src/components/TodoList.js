@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EditableTodo from '../containers/EditableTodo';
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 const TodoList = ({todos, onTodoClick, onTodoDelete, onTodoToggleEditing}) => {
   let todoItems = [];
-  
   todoItems = todos.map(todo => {
     return <EditableTodo 
       key={todo.id} 
@@ -24,4 +25,4 @@ TodoList.propTypes = {
   onDelete: PropTypes.func
 }
 
-export default TodoList;
+export default DragDropContext(HTML5Backend)(TodoList);

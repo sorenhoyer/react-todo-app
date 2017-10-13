@@ -5,6 +5,7 @@ const todos = (state = [], action) => {
         ...state,
         {
           id: action.id,
+          index: action.id,
           title: action.title,
           completed: false,
           isEditing: false
@@ -33,6 +34,15 @@ const todos = (state = [], action) => {
         }
         return newObj;
       });
+    }
+    case 'MOVE_TODO': {
+      const dragTodo = state[action.dragIndex];
+      const newTodos = [...state];
+      newTodos.splice(action.dragIndex, 1); // removing what you are dragging.
+      newTodos.splice(action.hoverIndex, 0, dragTodo); // inserting it into hoverIndex.
+      return newTodos;
+
+      // return update(state, {$splice: [[action.dragIndex, 1], [action.hoverIndex, 0, dragTodo]]}) // https://reactjs.org/docs/update.html
     }
     default:
       return state;

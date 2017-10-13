@@ -40,4 +40,12 @@ export const updateTodo = (id, title) => {
   }
 }
 
+export const moveTodo = (dragIndex, hoverIndex) => {
+  return {
+    type: 'MOVE_TODO',
+    dragIndex,
+    hoverIndex
+  }
+}
+
 
