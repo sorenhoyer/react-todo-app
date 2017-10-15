@@ -69,7 +69,9 @@ let Todo = ({id, title, isEditing, completed, onClickTodo, onDeleteTodo, onToggl
       }>
       Delete
     </a>
-    <a
+    {
+      // eslint-disable-next-line
+    }<a
       href="#"
       onClick={e => {
         e.persist();
